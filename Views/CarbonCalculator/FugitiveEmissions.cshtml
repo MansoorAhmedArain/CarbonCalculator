@@ -1,0 +1,185 @@
+﻿@model WTechAuth.Models.CarbonCalculatorViewModel
+
+@{
+    ViewData["Title"] = "Step 5: Refrigerants and fugitive emissions (Scope-1)";
+}
+
+<h2>Step 5: Refrigerants and fugitive emissions (Scope-1)</h2>
+<h3 style="color:red; font-size: 18px; font-weight: 600; ">
+    <i>Emissions from the leakage from the refrigeration devices</i>
+</h3>
+
+<!-- Form Starts Here -->
+<form method="post" asp-action="ElectricityHeating" id="emissionForm">
+    <p>Select the refrigerants and other chemical gases you use</p>
+
+    <!-- Checkbox Row -->
+    <div class="row">
+        <div class="col-md-3 col-6">
+            <input type="checkbox" id="carbonDioxide" class="form-check-input gas-checkbox" data-field="carbonDioxideField">
+            <label for="carbonDioxide" class="form-check-label">Carbon Dioxide</label>
+        </div>
+        <div class="col-md-3 col-6">
+            <input type="checkbox" id="methane" class="form-check-input gas-checkbox" data-field="methaneField">
+            <label for="methane" class="form-check-label">Methane</label>
+        </div>
+        <div class="col-md-3 col-6">
+            <input type="checkbox" id="nitrousOxide" class="form-check-input gas-checkbox" data-field="nitrousOxideField">
+            <label for="nitrousOxide" class="form-check-label">Nitrous Oxide</label>
+        </div>
+        <div class="col-md-3 col-6">
+            <input type="checkbox" id="hfc23" class="form-check-input gas-checkbox" data-field="hfc23Field">
+            <label for="hfc23" class="form-check-label">HFC-23</label>
+        </div>
+    </div>
+
+    <!-- Another row for more gases -->
+    <div class="row mt-3">
+        <div class="col-md-3 col-6">
+            <input type="checkbox" id="hfc32" class="form-check-input gas-checkbox" data-field="hfc32Field">
+            <label for="hfc32" class="form-check-label">HFC-32</label>
+        </div>
+        <div class="col-md-3 col-6">
+            <input type="checkbox" id="hfc125" class="form-check-input gas-checkbox" data-field="hfc125Field">
+            <label for="hfc125" class="form-check-label">HFC-125</label>
+        </div>
+        <div class="col-md-3 col-6">
+            <input type="checkbox" id="r507A" class="form-check-input gas-checkbox" data-field="r507AField">
+            <label for="r507A" class="form-check-label">R507A</label>
+        </div>
+        <div class="col-md-3 col-6">
+            <input type="checkbox" id="r508B" class="form-check-input gas-checkbox" data-field="r508BField">
+            <label for="r508B" class="form-check-label">R508B</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mb-3">
+            <label for="preferredUnit" class="form-label">Unit</label>
+            <select class="form-select" id="preferredUnit" name="preferredUnit">
+                <option value="kg" selected>kg</option>
+                <option value="lbs">lbs</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Hidden Input Fields (initially hidden) -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div id="carbonDioxideField" class="hidden-field">
+                <label for="carbonDioxideValue">Specify the value of Carbon Dioxide:</label>
+                <input type="number" class="form-control" id="carbonDioxideValue">
+            </div>
+            <div id="methaneField" class="hidden-field">
+                <label for="methaneValue">Specify the value of Methane:</label>
+                <input type="number" class="form-control" id="methaneValue">
+            </div>
+            <div id="nitrousOxideField" class="hidden-field">
+                <label for="nitrousOxideValue">Specify the value of Nitrous Oxide:</label>
+                <input type="number" class="form-control" id="nitrousOxideValue">
+            </div>
+            <div id="hfc23Field" class="hidden-field">
+                <label for="hfc23Value">Specify the value of HFC23:</label>
+                <input type="number" class="form-control" id="hfc23Value">
+            </div>
+            <div id="hfc32Field" class="hidden-field">
+                <label for="hfc32Value">Specify the value of HFC32:</label>
+                <input type="number" class="form-control" id="hfc32Value">
+            </div>
+            <div id="hfc125Field" class="hidden-field">
+                <label for="hfc125Value">Specify the value of HFC125:</label>
+                <input type="number" class="form-control" id="hfc125Value">
+            </div>
+            <div id="r507AField" class="hidden-field">
+                <label for="r507AValue">Specify the value of R507A:</label>
+                <input type="number" class="form-control" id="r507AValue">
+            </div>
+            <div id="r508BField" class="hidden-field">
+                <label for="r508BValue">Specify the value of R508B:</label>
+                <input type="number" class="form-control" id="r508BValue">
+            </div>
+            <!-- Add more input fields as needed -->
+        </div>
+    </div>
+      @* <input type="button" value="Calculate Emissions" onclick="calculateTotalEmissions()"> *@ 
+ 
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn simple-btn mx-3" onclick="window.location.href='@Url.Action("DeliveryVehicle", "CarbonCalculator")'">Previous</button>
+        <button class="btn simple-btn mx-3" onclick="handleFormSubmit()">Next</button>
+    </div>
+
+ </form>
+ 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Handle checkbox change event
+        $('.gas-checkbox').on('change', function () {
+            const fieldId = $(this).data('field'); // Get the field ID from data attribute
+            if (this.checked) {
+                $('#' + fieldId).slideDown(); // Show the corresponding input field
+            } else {
+                $('#' + fieldId).slideUp(); // Hide the corresponding input field
+            }
+        });
+    });
+
+    // Define the emission factors for each gas
+    const emissionFactors = {
+        carbonDioxide: 1,      // kg
+        methane: 21,           // kg
+        nitrousOxide: 310,     // kg
+        hfc23: 11700,          // kg
+        hfc32: 650,            // kg
+        hfc125: 2800,          // kg
+        r507A: 3300,           // kg
+        r508B: 10350           // kg
+    };
+
+    // Function to calculate emissions for selected refrigerants
+    function calculateTotalEmissions() {
+        // Get user input for the refrigerant gases (values are taken only if the checkbox is checked)
+        const carbonDioxide = parseFloat(document.getElementById('carbonDioxideValue').value) || 0;
+        const methane = parseFloat(document.getElementById('methaneValue').value) || 0;
+        const nitrousOxide = parseFloat(document.getElementById('nitrousOxideValue').value) || 0;
+        const hfc23 = parseFloat(document.getElementById('hfc23Value').value) || 0;
+        const hfc32 = parseFloat(document.getElementById('hfc32Value').value) || 0;
+        const hfc125 = parseFloat(document.getElementById('hfc125Value').value) || 0;
+        const r507A = parseFloat(document.getElementById('r507AValue').value) || 0;
+        const r508B = parseFloat(document.getElementById('r508BValue').value) || 0;
+
+        // Calculate emissions for each selected refrigerant
+        const carbonDioxideEmissions = (carbonDioxide * emissionFactors.carbonDioxide).toFixed(4);
+        const methaneEmissions = (methane * emissionFactors.methane).toFixed(4);
+        const nitrousOxideEmissions = (nitrousOxide * emissionFactors.nitrousOxide).toFixed(4);
+        const hfc23Emissions = (hfc23 * emissionFactors.hfc23).toFixed(4);
+        const hfc32Emissions = (hfc32 * emissionFactors.hfc32).toFixed(4);
+        const hfc125Emissions = (hfc125 * emissionFactors.hfc125).toFixed(4);
+        const r507AEmissions = (r507A * emissionFactors.r507A).toFixed(4);
+        const r508BEmissions = (r508B * emissionFactors.r508B).toFixed(4);
+
+        // Log emissions to the console
+        console.log("Carbon Dioxide Emissions:", carbonDioxideEmissions);
+        console.log("Methane Emissions:", methaneEmissions);
+        console.log("Nitrous Oxide Emissions:", nitrousOxideEmissions);
+        console.log("HFC-23 Emissions:", hfc23Emissions);
+        console.log("HFC-32 Emissions:", hfc32Emissions);
+        console.log("HFC-125 Emissions:", hfc125Emissions);
+        console.log("R507A Emissions:", r507AEmissions);
+        console.log("R508B Emissions:", r508BEmissions);
+
+        // Store the emissions in sessionStorage (or handle them as required)
+        sessionStorage.setItem("RefrigerantEmissions", carbonDioxideEmissions + "," + methaneEmissions + "," + nitrousOxideEmissions +
+            "," + hfc23Emissions + "," + hfc32Emissions + "," + hfc125Emissions + "," + r507AEmissions + "," + r508BEmissions);
+    }
+
+    // Example button action
+    function handleFormSubmit() {
+        // Perform emissions calculations
+        calculateTotalEmissions();
+
+        // Submit the form after the calculations
+        document.getElementById('emissionForm').submit();
+    }
+</script>

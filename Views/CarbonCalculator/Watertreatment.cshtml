@@ -1,0 +1,80 @@
+﻿@model WTechAuth.Models.CarbonCalculatorViewModel
+
+@{
+    ViewData["Title"] = "Step 12: Water treatment (Scope-3)";
+}
+
+<h2>
+    Step 12: Water treatment (Scope-3)
+</h2>
+<h3 style="color:red; font-size: 14px;">
+    Enter the average monthly data for your company’s water treatment.
+</h3>
+
+<form method="post" asp-action="Watertreatment">
+
+    <!-- Water Treatment Question -->
+    <div class="row mb-3">
+        <label class="form-label">
+            Do you perform water treatment?
+        </label>
+        <div class="row mb-3 text-center">
+            <div class="col-6">
+                <button type="button" class="btn btn-outline-dark w-100" id="yesBtn">Yes</button>
+            </div>
+            <div class="col-6">
+                <button type="button" class="btn btn-outline-dark w-100" id="noBtn">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conditional Fields for Water Treatment (Initially hidden) -->
+    <div id="waterTreatmentFields" class="row mb-3" style="display: none;">
+        <div class="col-6">
+            <div class="input-group mb-3">
+                <label for="waterType" class="form-label">Specify the water being treated</label>
+
+                <input type="number" class="form-control" id="waterType" placeholder="Enter size" value="1000">
+                <span class="input-group-text">m<sup>3</sup></span>
+            </div>
+        </div>
+        <div class="col-6">
+            <label for="unit" class="form-label">Unit</label>
+            <select id="unit" class="form-select" name="Unit">
+                <option value="m3">m3</option>
+                <option value="CCF">CCF</option>
+                <option value="Gallons">Gallons (US)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn simple-btn mx-3" onclick="window.location.href='@Url.Action("Watersuppy", "CarbonCalculator")'">Previous</button>
+        <button class="btn simple-btn mx-3">Next</button>
+    </div>
+</form>
+
+<!-- jQuery Script for Showing/Hiding Fields -->
+<script>
+    $(document).ready(function () {
+        // Hide the fields initially
+        $('#waterTreatmentFields').hide();
+
+        // When 'Yes' button is clicked
+        $('#yesBtn').click(function () {
+            // Show the fields and change button styles
+            $('#waterTreatmentFields').show();
+            $('#yesBtn').addClass('btn-dark').removeClass('btn-outline-dark');
+            $('#noBtn').addClass('btn-outline-dark').removeClass('btn-dark');
+        });
+
+        // When 'No' button is clicked
+        $('#noBtn').click(function () {
+            // Hide the fields and change button styles
+            $('#waterTreatmentFields').hide();
+            $('#noBtn').addClass('btn-dark').removeClass('btn-outline-dark');
+            $('#yesBtn').addClass('btn-outline-dark').removeClass('btn-dark');
+        });
+    });
+</script>

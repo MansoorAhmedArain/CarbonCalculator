@@ -1,0 +1,130 @@
+﻿@model WTechAuth.Models.CarbonCalculatorViewModel
+
+@{
+    ViewData["Title"] = "Electricity,Heat, Steam, Cooling";
+}
+
+<h2>
+    Step 6: Electricity,Heat, Steam, Cooling    (Scope-2)
+</h2>
+<h3 style="color:red; font-size: 18px; font-weight: 600; ">
+    <i>
+        Short Description: Indirect greenhouse gas emissions from the consumption of purchased energy, such as electricity, heat, steam, or cooling. These emissions occur at the facility where the energy is generated, but they are accounted for by the organization using the energy.</i>
+</h3>
+
+<!-- Form Starts Here -->
+<form method="post" asp-action="Transportation">
+
+    <!-- Country Selection -->
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <label for="country" class="form-label">Country</label>
+            <select class="form-select" id="country" name="country" onchange="updateUnitAndFactor()">
+                <option value="" disabled selected>Select a country</option>
+                <option value="South Africa" data-factor="0.8665">South Africa</option>
+                <option value="China (PR)" data-factor="0.5572">China (PR)</option>
+                <option value="Hong Kong (China)" data-factor="0.7100">Hong Kong (China)</option>
+                <option value="India" data-factor="0.7132">India</option>
+                <option value="Indonesia" data-factor="0.7848">Indonesia</option>
+                <option value="Japan" data-factor="0.4615">Japan</option>
+                <option value="Korea (Republic)" data-factor="0.4113">Korea (Republic)</option>
+                <option value="Singapore" data-factor="0.408">Singapore</option>
+                <option value="Thailand" data-factor="0.407">Thailand</option>
+                <option value="Australia" data-factor="0.680">Australia</option>
+                <option value="New Zealand" data-factor="0.103">New Zealand</option>
+                <option value="Saudi Arabia" data-factor="0.6142">Saudi Arabia</option>
+                <option value="Bahrain" data-factor="0.8248637">Bahrain</option>
+                <option value="Egypt" data-factor="0.4698084">Egypt</option>
+                <option value="Georgia" data-factor="0.1449678">Georgia</option>
+                <option value="Islamic Republic of Iran" data-factor="0.5143547">Islamic Republic of Iran</option>
+                <option value="Iraq" data-factor="0.7009096">Iraq</option>
+                <option value="Israel" data-factor="0.773651">Israel</option>
+                <option value="Jordan" data-factor="0.6018739">Jordan</option>
+                <option value="Kazakhstan" data-factor="0.5200265">Kazakhstan</option>
+                <option value="Kenya" data-factor="0.3174905">Kenya</option>
+                <option value="Oman" data-factor="0.8561127">Oman</option>
+                <option value="Pakistan" data-factor="0.4128082">Pakistan</option>
+                <option value="Kuwait" data-factor="0.6429168">Kuwait</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Unit and Quantity -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="quantity" class="form-label">How much electricity do you use?</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" min="0" step="any" oninput="calculateEmissions()">
+        </div>
+
+        <div class="col-md-6">
+            <label for="unit" class="form-label">Unit</label>
+            <select class="form-select" id="unit" name="unit">
+                <option value="kWh" selected>kWh</option>
+                <!-- Add other units if applicable -->
+            </select>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn simple-btn mx-3" onclick="window.location.href='@Url.Action("FugitiveEmissions", "CarbonCalculator")'">Previous</button>
+        <button class="btn simple-btn mx-3">Next</button>
+    </div>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Handle heating option button click
+        $('.heating-option').on('click', function () {
+            var target = $(this).data('target');
+            $(target).slideToggle();
+        });
+    });
+    // Define the emission factors for each gas
+    const emissionFactors = {
+        carbonDioxide: { factor: 1, value: 0 },     // kg
+        methane: { factor: 21, value: 0 },          // kg
+        nitrousOxide: { factor: 310, value: 0 },    // kg
+        hfc23: { factor: 11700, value: 0 },         // kg
+        hfc32: { factor: 650, value: 0 },           // kg
+        hfc125: { factor: 2800, value: 0 },         // kg
+        r507A: { factor: 3300, value: 0 },          // kg
+        r508B: { factor: 10350, value: 0 }          // kg
+    };
+
+    // Function to calculate emissions for all refrigerants
+    function calculateTotalEmissions() {
+        // Loop through the emissionFactors object and update values from input fields
+        for (const gas in emissionFactors) {
+            // Get the user input for the gas (if the input field exists)
+            const inputValue = parseFloat(document.getElementById(`${gas}Value`).value) || 0;
+
+            // Update the value in the emissionFactors object
+            emissionFactors[gas].value = inputValue;
+
+            // Calculate the emissions and update the factor
+            emissionFactors[gas].emissions = (emissionFactors[gas].value * emissionFactors[gas].factor).toFixed(4);
+        }
+
+        // Log the calculated emissions to the console
+        for (const gas in emissionFactors) {
+            console.log(`${gas} Emissions:`, emissionFactors[gas].emissions);
+        }
+
+        // Store the emissions in sessionStorage (or handle as required)
+        const emissionData = Object.values(emissionFactors).map(gas => gas.emissions).join(",");
+        sessionStorage.setItem("RefrigerantEmissions", emissionData);
+    }
+
+    // Example button action to handle form submission
+    function handleFormSubmit() {
+        // Perform emissions calculations
+        calculateTotalEmissions();
+
+        // Submit the form after the calculations
+        document.getElementById('emissionForm').submit();
+    }
+
+</script>

@@ -1,0 +1,49 @@
+﻿@model WTechAuth.Models.CarbonCalculatorViewModel
+
+@{
+    ViewData["Title"] = "Step 11: Water supply (Scope-3)";
+}
+
+<h2>
+    Step 11: Water supply (Scope-3)
+</h2>
+<h3 style="color:red; font-size: 14px;">
+    Enter the average monthly data for water taken  from water supply comapnies .
+</h3>
+
+<form method="post" asp-action="Watertreatment">
+   
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="mb-3">
+                <label for="facilitySize" class="form-label">
+                    Water taken from water supply company
+                </label>
+                <div class="input-group mb-3">
+
+                <input type="number" class="form-control" id="facilitySize" placeholder="Enter size" value="1000" readonly>
+                    <span class="input-group-text">m<sup>3</sup></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="officeUnit" class="form-label">
+                    Unit
+                </label>
+                <select class="form-select" id="officeUnit" name="officeUnit">
+                    <option value="m2" selected>m²</option>
+                    <option value="ft2">ft²</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn simple-btn mx-3" onclick="window.location.href='@Url.Action("Wastedisposal", "CarbonCalculator")'">Previous</button>
+        <button class="btn simple-btn mx-3">Next</button>
+    </div>
+</form>

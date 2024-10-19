@@ -1,0 +1,208 @@
+﻿@model WTechAuth.Models.CarbonCalculatorViewModel
+
+@{
+    ViewData["Title"] = "Process Emission";
+}
+
+<h2>Step 4: Process Emission (Scope -1)</h2>
+<h3 style="color:red; font-size: 18px; font-weight: 600; ">
+    <i>Process emissions are greenhouse gases released during industrial activities, not from burning fuel. They result from chemical reactions in the production of materials like cement and steel. Common gases include carbon dioxide (CO2) and methane (CH4).</i>
+</h3>
+
+<!-- Form Starts Here -->
+<form method="post" asp-action="FugitiveEmissions">
+    <div class="row mb-3" >
+        <div class="col-6">
+            <label for="cementProduction" class="form-label">Cement Production</label>
+            <div class="input-group mb-3">
+
+                <input type="number" class="form-control" id="cementProduction" name="cementProduction" />
+                <span class="input-group-text">kg</span>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <label for="steelmanufacturing" class="form-label">
+                Steel Manufacturing
+            </label>
+            <div class="input-group mb-3">
+                <input type="number" class="form-control" id="steelManufacturing" name="steelManufacturing" />
+
+                <span class="input-group-text">kg</span>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-6">
+            <label for="nitricacidproduction" class="form-label">
+                Nitric Acid Production
+            </label>
+            <div class="input-group mb-3">
+
+                <input type="number" class="form-control" id="nitricAcidProduction" name="nitricAcidProduction" />
+                <span class="input-group-text">kg</span>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <label for="ammoniaproduction" class="form-label">
+                Ammonia Production
+            </label>
+            <div class="input-group mb-3">
+
+                <input type="number" class="form-control" id="ammoniaProduction" name="ammoniaProduction" />
+                <span class="input-group-text">kg</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-6">
+            <label for="adipicacidproduction" class="form-label">
+                Adipic Acid Production
+            </label>
+            <div class="input-group mb-3">
+
+                <input type="number" class="form-control" id="adipicAcidProduction" name="adipicAcidProduction" />
+                <span class="input-group-text">kg</span>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <label for="glassmanufacturing" class="form-label">
+                Glass Manufacturing
+            </label>
+            <div class="input-group mb-3">
+
+                <input type="number" class="form-control" id="glassManufacturing" name="glassManufacturing" />
+                <span class="input-group-text">kg</span>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row mb-3">
+        <div class="col-6">
+            <label for="aluminumproduction" class="form-label">
+                Aluminum Production
+            </label>
+            <div class="input-group mb-3">
+
+                <input type="number" class="form-control" id="aluminumProduction" name="aluminumProduction" />
+                <span class="input-group-text">kg</span>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <label for="sodaashproduction" class="form-label">
+                Soda Ash Production
+            </label>
+            <div class="input-group mb-3">
+
+                <input type="number" class="form-control" id="sodaAshProduction" name="sodaAshProduction" />
+                <span class="input-group-text">kg</span>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-6">
+            <label for="limeProduction" class="form-label">
+                Lime Production
+            </label>
+            <div class="input-group mb-3">
+                <input type="number" class="form-control" id="limeProduction" name="limeProduction" />
+                <span class="input-group-text">kg</span>
+            </div>
+        </div>
+    </div>
+
+
+@*      <input type="button" value="Calculate Emissions" onclick="calculateTotalEmissions()"> 
+ *@
+
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn simple-btn mx-3" onclick="window.location.href='@Url.Action("StationaryCombustion", "CarbonCalculator")'">Previous</button>
+        <button class="btn simple-btn mx-3" onclick="handleFormSubmit()">Next</button>
+    </div>
+</form>
+ 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // Move emissionFactors to the top to ensure it's defined before it's used
+    const emissionFactors = {
+        cementProduction: 0.500,
+        steelManufacturing: 1.20,
+        nitricAcidProduction: 0.0085,
+        ammoniaProduction: 1.600,
+        limeProduction: 0.800,
+        glassManufacturing: 0.210,
+        aluminumProduction: 1.70,
+        sodaAshProduction: 0.14,
+        adipicAcidProduction: 0.30
+    };
+
+    $(document).ready(function () {
+        // Handle checkbox change event
+        $('.gas-checkbox').on('change', function () {
+            const fieldId = $(this).data('field');
+            if (this.checked) {
+                $('#' + fieldId).slideDown();
+            } else {
+                $('#' + fieldId).slideUp();
+            }
+        });
+    });
+
+    // Function to calculate emissions for each process separately
+    function calculateTotalEmissions() {
+        // Get user input for all processes
+        const cementProduction = parseFloat(document.getElementById('cementProduction').value) || 0;
+        const steelManufacturing = parseFloat(document.getElementById('steelManufacturing').value) || 0;
+        const nitricAcidProduction = parseFloat(document.getElementById('nitricAcidProduction').value) || 0;
+        const ammoniaProduction = parseFloat(document.getElementById('ammoniaProduction').value) || 0;
+        const limeProduction = parseFloat(document.getElementById('limeProduction').value) || 0;
+        const glassManufacturing = parseFloat(document.getElementById('glassManufacturing').value) || 0;
+        const aluminumProduction = parseFloat(document.getElementById('aluminumProduction').value) || 0;
+        const sodaAshProduction = parseFloat(document.getElementById('sodaAshProduction').value) || 0;
+        const adipicAcidProduction = parseFloat(document.getElementById('adipicAcidProduction').value) || 0;
+
+        // Calculate emissions for each process
+        const cementEmissions = (cementProduction * emissionFactors.cementProduction).toFixed(4);
+        const steelEmissions = (steelManufacturing * emissionFactors.steelManufacturing).toFixed(4);
+        const nitricAcidEmissions = (nitricAcidProduction * emissionFactors.nitricAcidProduction).toFixed(4);
+        const ammoniaEmissions = (ammoniaProduction * emissionFactors.ammoniaProduction).toFixed(4);
+        const limeEmissions = (limeProduction * emissionFactors.limeProduction).toFixed(4);
+        const glassEmissions = (glassManufacturing * emissionFactors.glassManufacturing).toFixed(4);
+        const aluminumEmissions = (aluminumProduction * emissionFactors.aluminumProduction).toFixed(4);
+        const sodaAshEmissions = (sodaAshProduction * emissionFactors.sodaAshProduction).toFixed(4);
+        const adipicAcidEmissions = (adipicAcidProduction * emissionFactors.adipicAcidProduction).toFixed(4);
+
+        // Log emissions to console
+        console.log("Cement Emissions", cementEmissions);
+        console.log("Steel Emissions", steelEmissions);
+        console.log("Nitric Acid Emissions", nitricAcidEmissions);
+        console.log("Ammonia Emissions", ammoniaEmissions);
+        console.log("Lime Emissions", limeEmissions);
+        console.log("Glass Emissions", glassEmissions);
+        console.log("Aluminum Emissions", aluminumEmissions);
+        console.log("Soda Ash Emissions", sodaAshEmissions);
+        console.log("Adipic Acid Emissions", adipicAcidEmissions);
+
+        // Store emissions in sessionStorage
+        sessionStorage.setItem("ProcessEmission", cementEmissions + "," + steelEmissions + "," + nitricAcidEmissions +
+            "," + ammoniaEmissions + "," + limeEmissions + "," + glassEmissions + "," + aluminumEmissions + "," +
+            sodaAshEmissions + "," + adipicAcidEmissions);
+    }
+
+    function handleFormSubmit() {
+        // Perform emissions calculations
+        calculateTotalEmissions();
+
+        // Submit the form after the calculations
+        document.querySelector('form').submit();
+    }
+
+</script>

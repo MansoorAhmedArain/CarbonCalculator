@@ -1,0 +1,112 @@
+﻿@model WTechAuth.Models.CarbonCalculatorViewModel
+
+@{
+    ViewData["Title"] = "Transportation of Goods";
+}
+
+<h2>Step 9: Transportation of goods (Scope-3)</h2>
+<h3 style="color:red; font-size: 14px;">
+    Enter the average monthly data for your company’s transportation of goods. Not applicable for company owned vehicles which are covered in Step 4: Delivery vehicles.
+</h3>
+
+<!-- Form Starts Here -->
+<form method="post" asp-action="Wastedisposal">
+    <!-- Vehicle Selection Buttons -->
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <label class="form-label">Select Vehicle Type:</label>
+            <div class="row">
+                <div class="col-4 text-center">
+                    <button type="button" class="btn btn-outline-dark w-100" id="shipBtn">Ship</button>
+                </div>
+                <div class="col-4 text-center">
+                    <button type="button" class="btn btn-outline-dark w-100" id="airlineBtn">Airline</button>
+                </div>
+                <div class="col-4 text-center">
+                    <button type="button" class="btn btn-outline-dark w-100" id="truckBtn">Truck</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unit Selection -->
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <div class="mb-3">
+                <label for="distanceUnit" class="form-label">Select the suitable unit</label>
+                <select class="form-select" id="distanceUnit" name="distanceUnit">
+                    <option value="tonne-km" selected>tonne-km</option>
+                    <option value="tonne-miles">tonne-miles</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic Input Fields for Ship, Airline, and Truck -->
+    <div id="inputFields">
+        <!-- Shipments from Ship -->
+        <div class="row mb-3" id="shipField" style="display:none;">
+            <div class="col-md-12">
+                <label for="shipmentsFromShip" class="form-label">Specify the shipments from ships</label>
+                <input type="number" class="form-control" id="shipmentsFromShip" name="shipmentsFromShip" >
+            </div>
+        </div>
+
+        <!-- Shipments from Airline -->
+        <div class="row mb-3" id="airlineField" style="display:none;">
+            <div class="col-md-12">
+                <label for="shipmentsFromAirline" class="form-label">Specify the shipments from airlines</label>
+                <input type="number" class="form-control" id="shipmentsFromAirline" name="shipmentsFromAirline">
+            </div>
+        </div>
+
+        <!-- Shipments from Truck -->
+        <div class="row mb-3" id="truckField" style="display:none;">
+            <div class="col-md-12">
+                <label for="shipmentsFromTruck" class="form-label">Specify the shipments from trucks</label>
+                <input type="number" class="form-control" id="shipmentsFromTruck" name="shipmentsFromTruck" >
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn simple-btn mx-3" onclick="window.location.href='@Url.Action("Businessairtravel", "CarbonCalculator")'">Previous</button>
+        <button type="submit" class="btn simple-btn mx-3">Next</button>
+    </div>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Script to handle multiple button selections and dynamic fields -->
+<script>
+    // Function to toggle button and corresponding input field visibility
+    function toggleField(buttonId, fieldId) {
+        let button = document.getElementById(buttonId);
+        let field = document.getElementById(fieldId);
+
+        // Toggle button style
+        button.classList.toggle('btn-outline-dark');
+        button.classList.toggle('btn-dark');
+
+        // Toggle visibility of the input field
+        if (field.style.display === "none") {
+            field.style.display = "block";
+        } else {
+            field.style.display = "none";
+        }
+    }
+
+    // Attach event listeners to the buttons
+    document.getElementById('shipBtn').addEventListener('click', function () {
+        toggleField('shipBtn', 'shipField');
+    });
+
+    document.getElementById('airlineBtn').addEventListener('click', function () {
+        toggleField('airlineBtn', 'airlineField');
+    });
+
+    document.getElementById('truckBtn').addEventListener('click', function () {
+        toggleField('truckBtn', 'truckField');
+    });
+</script>

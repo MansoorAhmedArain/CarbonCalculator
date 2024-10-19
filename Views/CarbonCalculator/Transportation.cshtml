@@ -1,0 +1,125 @@
+﻿@model WTechAuth.Models.CarbonCalculatorViewModel
+
+@{
+    ViewData["Title"] = "Transportation";
+}
+
+<h2>
+    Step 7: Transportation (Scope-3)
+</h2>
+<h3 style="color:red; font-size: 14px;">
+    Enter the average monthly data for your employees commuting to work. Not applicable for company-owned cars which are covered in Step 2: Mobile combustion.
+</h3>
+
+<!-- Form Starts Here -->
+<form method="post" asp-action="Businessairtravel">
+
+    <!-- Transportation Method Section -->
+    <div class="row mb-3">
+        <label class="form-label">
+            How employees commute to work?
+        </label>
+        <div class="row mb-3">
+            <!-- Taxi Button -->
+            <div class="col-3 text-end">
+                <button type="button" class="btn btn-outline-dark fuel-type-btn w-100" id="taxiBtn">Taxi</button>
+            </div>
+            <!-- Bus Button -->
+            <div class="col-3 text-start">
+                <button type="button" class="btn btn-outline-dark fuel-type-btn w-100" id="busBtn">Bus</button>
+            </div>
+            <!-- Subway Button -->
+            <div class="col-3 text-start">
+                <button type="button" class="btn btn-outline-dark fuel-type-btn w-100" id="subwayBtn">Subway</button>
+            </div>
+            <!-- Cars (Private) Button -->
+            <div class="col-3 text-start">
+                <button type="button" class="btn btn-outline-dark fuel-type-btn w-100" id="carBtn">Cars (Private)</button>
+            </div>
+        </div>
+        <!-- Unit Selector -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="preferredUnit" class="form-label">Unit</label>
+                    <select class="form-select" id="officeUnit" name="distanceUnit">
+                        <option value="km" selected>km</option>
+                        <option value="miles">miles</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <!-- Hidden input fields for each transportation method -->
+        <div class="row mb-3">
+            <!-- Taxi Input -->
+            <div class="col-12 mb-3" id="taxiDistance" style="display: none;">
+                <label for="taxiDistanceInput" class="form-label">Distance travelled by taxi per month</label>
+                <input type="text" class="form-control" id="taxiDistanceInput" name="taxiDistanceInput" placeholder="Enter distance in km or miles">
+            </div>
+
+            <!-- Bus Input -->
+            <div class="col-12 mb-3" id="busDistance" style="display: none;">
+                <label for="busDistanceInput" class="form-label">Distance travelled by bus per month</label>
+                <input type="text" class="form-control" id="busDistanceInput" name="busDistanceInput" placeholder="Enter distance in km or miles">
+            </div>
+
+            <!-- Subway Input -->
+            <div class="col-12 mb-3" id="subwayDistance" style="display: none;">
+                <label for="subwayDistanceInput" class="form-label">Distance travelled by subway per month</label>
+                <input type="text" class="form-control" id="subwayDistanceInput" name="subwayDistanceInput" placeholder="Enter distance in km or miles">
+            </div>
+
+            <!-- Car Input -->
+            <div class="col-12 mb-3" id="carDistance" style="display: none;">
+                <label for="carDistanceInput" class="form-label">Distance travelled by car per month</label>
+                <input type="text" class="form-control" id="carDistanceInput" name="carDistanceInput" placeholder="Enter distance in km or miles">
+            </div>
+        </div>
+
+     
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn simple-btn mx-3" onclick="window.location.href='@Url.Action("ElectricityHeating", "CarbonCalculator")'">Previous</button>
+        <button class="btn simple-btn mx-3">Next</button>
+    </div>
+</form>
+
+<!-- Script to handle button selection and input field visibility -->
+<script>
+    // Function to toggle visibility of the input fields
+    function toggleField(buttonId, fieldId) {
+        let button = document.getElementById(buttonId);
+        let field = document.getElementById(fieldId);
+
+        button.classList.toggle('btn-outline-dark');
+        button.classList.toggle('btn-dark'); // Change button style on selection
+
+        // Toggle the visibility of the input field
+        if (field.style.display === "none") {
+            field.style.display = "block";
+        } else {
+            field.style.display = "none";
+        }
+    }
+
+    // Attach event listeners to buttons
+    document.getElementById('taxiBtn').addEventListener('click', function () {
+        toggleField('taxiBtn', 'taxiDistance');
+    });
+
+    document.getElementById('busBtn').addEventListener('click', function () {
+        toggleField('busBtn', 'busDistance');
+    });
+
+    document.getElementById('subwayBtn').addEventListener('click', function () {
+        toggleField('subwayBtn', 'subwayDistance');
+    });
+
+    document.getElementById('carBtn').addEventListener('click', function () {
+        toggleField('carBtn', 'carDistance');
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

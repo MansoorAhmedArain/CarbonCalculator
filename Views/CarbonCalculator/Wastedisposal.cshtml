@@ -1,0 +1,148 @@
+﻿@model WTechAuth.Models.CarbonCalculatorViewModel
+
+@{
+    ViewData["Title"] = "Waste disposal";
+}
+
+<h2>
+    Step 10: Waste disposal (Scope-3)
+</h2>
+<h3 style="color:red; font-size: 14px;">
+    Enter the average monthly data for your company’s waste disposal.
+</h3>
+
+<!-- Form Starts Here -->
+<form method="post" asp-action="Watersupply">
+
+    <!-- Waste Type Buttons Section -->
+    <div class="row mb-3">
+        <label class="form-label">
+            Select the waste type:
+        </label>
+        <div class="row mb-3 text-center">
+            <div class="col-4">
+                <button type="button" class="btn btn-outline-dark waste-type-btn w-100" id="tyresBtn">Tyres</button>
+            </div>
+            <div class="col-4">
+                <button type="button" class="btn btn-outline-dark waste-type-btn w-100" id="gardenWasteBtn">Garden Waste and Woods Shreds</button>
+            </div>
+            <div class="col-4">
+                <button type="button" class="btn btn-outline-dark waste-type-btn w-100" id="plasticsBtn">Plastics</button>
+            </div>
+        </div>
+        <div class="row mb-3 text-center">
+            <div class="col-4">
+                <button type="button" class="btn btn-outline-dark waste-type-btn w-100" id="paperBoardBtn">Paper and Board</button>
+            </div>
+            <div class="col-4">
+                <button type="button" class="btn btn-outline-dark waste-type-btn w-100" id="foodWasteBtn">Food and Drink Waste</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input Fields Section -->
+    <div class="row mb-3" id="tyresField" style="display:none;">
+        <div class="col-12">
+            <label for="tyresComposted" class="form-label">Tyres Composted Yearly (in tonnes)</label>
+            <div class="input-group mb-3">
+
+            <input type="number" class="form-control" id="tyresComposted" name="tyresComposted" />
+            <span class="input-group-text">tonnes</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3" id="gardenWasteField" style="display:none;">
+        <div class="col-12">
+            <label for="gardenWasteComposted" class="form-label">Garden Waste (Grass Clippings, Trees, Shrubs) and Woods Waste Composted Monthly (in tonnes)</label>
+            <div class="input-group mb-3">
+         
+                <input type="number" class="form-control" id="gardenWasteComposted" name="gardenWasteComposted" />
+            <span class="input-group-text">tonnes</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3" id="plasticsField" style="display:none;">
+        <div class="col-12">
+            <label for="plasticsComposted" class="form-label">Plastics Composted Monthly (in tonnes)</label>
+            <div class="input-group mb-3">
+
+            <input type="number" class="form-control" id="plasticsComposted" name="plasticsComposted" />
+            <span class="input-group-text">tonnes</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3" id="paperBoardField" style="display:none;">
+        <div class="col-12">
+
+            <label for="paperBoardComposted" class="form-label">Paper and Board Composted Monthly (in tonnes)</label>
+            <div class="input-group mb-3">
+
+            <input type="number" class="form-control" id="paperBoardComposted" name="paperBoardComposted" />
+            <span class="input-group-text">tonnes</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3" id="foodWasteField" style="display:none;">
+        <div class="col-12">
+            <label for="foodWasteComposted" class="form-label">Food and Drink Waste Composted Monthly (in tonnes)</label>
+            <div class="input-group mb-3">
+
+            <input type="number" class="form-control" id="foodWasteComposted" name="foodWasteComposted" />
+            <span class="input-group-text">tonnes</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn simple-btn mx-3" onclick="window.location.href='@Url.Action("Transportationofgoods", "CarbonCalculator")'">Previous</button>
+        <button class="btn simple-btn mx-3">Next</button>
+    </div>
+</form>
+
+<!-- Script to handle button selection and input field visibility -->
+<script>
+    // Function to toggle visibility of input fields based on button click
+    function toggleField(buttonId, fieldId) {
+        let button = document.getElementById(buttonId);
+        let field = document.getElementById(fieldId);
+
+        // Toggle button appearance
+        button.classList.toggle('btn-outline-dark');
+        button.classList.toggle('btn-dark');
+
+        // Toggle the visibility of the corresponding field
+        if (field.style.display === "none") {
+            field.style.display = "block";
+        } else {
+            field.style.display = "none";
+        }
+    }
+
+    // Attach event listeners to buttons
+    document.getElementById('tyresBtn').addEventListener('click', function () {
+        toggleField('tyresBtn', 'tyresField');
+    });
+
+    document.getElementById('gardenWasteBtn').addEventListener('click', function () {
+        toggleField('gardenWasteBtn', 'gardenWasteField');
+    });
+
+    document.getElementById('plasticsBtn').addEventListener('click', function () {
+        toggleField('plasticsBtn', 'plasticsField');
+    });
+
+    document.getElementById('paperBoardBtn').addEventListener('click', function () {
+        toggleField('paperBoardBtn', 'paperBoardField');
+    });
+
+    document.getElementById('foodWasteBtn').addEventListener('click', function () {
+        toggleField('foodWasteBtn', 'foodWasteField');
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

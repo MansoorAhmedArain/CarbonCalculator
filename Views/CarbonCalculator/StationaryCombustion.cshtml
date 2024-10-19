@@ -1,0 +1,237 @@
+﻿@model WTechAuth.Models.CarbonCalculatorViewModel
+
+@{
+    ViewData["Title"] = "Stationary Combustion - Scope 1";
+}
+
+<h2>Step 3:Stationary Combustion (Scope -1)</h2>
+<h3 style="color:red; font-size: 18px; font-weight: 600; ">
+    <i>The combustion of fuels such as diesel, natural gas in stationary sources contributes to greenhouse gas emissions, primarily carbon dioxide (CO₂)</i>
+</h3>
+
+<form method="post" asp-action="DeliveryVehicle">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="gasConsumption" class="form-label">
+                    How much Natural Gas does the company consume per month?
+                </label>
+                <input type="number" class="form-control" id="gasConsumption" name="gasConsumption">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="gasUnit" class="form-label">Unit</label>
+                <select class="form-select" id="gasUnit" name="gasUnit">
+                    <option value="tonnes" selected>tonnes</option>
+                    <option value="cubic meters">cubic meters</option>
+                    <option value="kWh Net CV">kWh Net CV</option>
+                    <option value="kWh Gross CV">kWh Gross CV</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="cngConsumption" class="form-label">How much CNG do you use per month?</label>
+                <input type="number" class="form-control" id="cngConsumption" name="cngConsumption">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="cngUnit" class="form-label">Unit</label>
+                <select class="form-select" id="cngUnit" name="cngUnit">
+                    <option value="tonnes" selected>tonnes</option>
+                    <option value="litres">litres</option>
+                    <option value="kWh Net CV">kWh Net CV</option>
+                    <option value="kWh Gross CV">kWh Gross CV</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="lngConsumption" class="form-label">How much LNG do you use per month?</label>
+                <input type="number" class="form-control" id="lngConsumption" name="lngConsumption">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="lngUnit" class="form-label">Unit</label>
+                <select class="form-select" id="lngUnit" name="lngUnit">
+                    <option value="tonnes" selected>tonnes</option>
+                    <option value="litres">litres</option>
+                    <option value="kWh Net CV">kWh Net CV</option>
+                    <option value="kWh Gross CV">kWh Gross CV</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="lpgConsumption" class="form-label">How much LPG does the company consume per month?</label>
+                <input type="number" class="form-control" id="lpgConsumption" name="lpgConsumption">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="lpgUnit" class="form-label">Unit</label>
+                <select class="form-select" id="lpgUnit" name="lpgUnit">
+                    <option value="tonnes" selected>tonnes</option>
+                    <option value="cubic meters">cubic meters</option>
+                    <option value="kWh Net CV">kWh Net CV</option>
+                    <option value="kWh Gross CV">kWh Gross CV</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="butaneConsumption" class="form-label">How much Butane do you use per month?</label>
+                <input type="number" class="form-control" id="butaneConsumption" name="butaneConsumption">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="butaneUnit" class="form-label">Unit</label>
+                <select class="form-select" id="butaneUnit" name="butaneUnit">
+                    <option value="tonnes" selected>tonnes</option>
+                    <option value="cubic meters">cubic meters</option>
+                    <option value="kWh Net CV">kWh Net CV</option>
+                    <option value="kWh Gross CV">kWh Gross CV</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="propaneConsumption" class="form-label">How much Propane do you use per month?</label>
+                <input type="number" class="form-control" id="propaneConsumption" name="propaneConsumption">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="propaneUnit" class="form-label">Unit</label>
+                <select class="form-select" id="propaneUnit" name="propaneUnit">
+                    <option value="tonnes" selected>tonnes</option>
+                    <option value="cubic meters">cubic meters</option>
+                    <option value="kWh Net CV">kWh Net CV</option>
+                    <option value="kWh Gross CV">kWh Gross CV</option>
+                </select>
+            </div>
+        </div>
+    </div>            
+@*     <input type="button" value="Calculate Emissions" onclick="calculateTotalEmissions()"> 
+ *@
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn simple-btn mx-3" onclick="window.location.href='@Url.Action("MobileCombustion", "CarbonCalculator")'">Previous</button>
+        <button class="btn simple-btn mx-3" onclick="handleFormSubmit()">Next</button>
+    </div>
+</form>
+
+<script>
+    // Declare emissionFactors globally so that it can be accessed in all functions
+    const emissionFactors = {
+        naturalGas: {
+            "tonnes": 2.75,
+            "cubic meters": 0.184,
+            "kWh Net CV": 0.202,
+            "kWh Gross CV": 0.215
+        },
+        cng: {
+            "tonnes": 2.9,
+            "litres": 0.25,
+            "kWh Net CV": 0.27,
+            "kWh Gross CV": 0.29
+        },
+        lng: {
+            "tonnes": 2.75,
+            "litres": 0.18,
+            "kWh Net CV": 0.20,
+            "kWh Gross CV": 0.22
+        },
+        lpg: {
+            "tonnes": 3.0,
+            "cubic meters": 0.20,
+            "kWh Net CV": 0.25,
+            "kWh Gross CV": 0.27
+        },
+        butane: {
+            "tonnes": 2.85,
+            "cubic meters": 0.22,
+            "kWh Net CV": 0.24,
+            "kWh Gross CV": 0.26
+        },
+        propane: {
+            "tonnes": 2.95,
+            "cubic meters": 0.23,
+            "kWh Net CV": 0.25,
+            "kWh Gross CV": 0.27
+        }
+    };
+
+    // Move the calculateEmission function outside the DOMContentLoaded block to make it globally accessible
+    function calculateEmission(consumption, unit, fuelType) {
+        if (emissionFactors[fuelType] && emissionFactors[fuelType][unit]) {
+            const factor = emissionFactors[fuelType][unit];
+            return consumption * factor;
+        } else {
+            console.error("Invalid unit or fuel type.");
+            return 0;
+        }
+    }
+
+    // Function to handle form submission or calculation trigger
+    function calculateTotalEmissions() {
+        // Get the consumption and unit values for each fuel
+        const gasConsumption = parseFloat(document.getElementById("gasConsumption").value) || 0;
+        const gasUnit = document.getElementById("gasUnit").value;
+        const cngConsumption = parseFloat(document.getElementById("cngConsumption").value) || 0;
+        const cngUnit = document.getElementById("cngUnit").value;
+        const lngConsumption = parseFloat(document.getElementById("lngConsumption").value) || 0;
+        const lngUnit = document.getElementById("lngUnit").value;
+        const lpgConsumption = parseFloat(document.getElementById("lpgConsumption").value) || 0;
+        const lpgUnit = document.getElementById("lpgUnit").value;
+        const butaneConsumption = parseFloat(document.getElementById("butaneConsumption").value) || 0;
+        const butaneUnit = document.getElementById("butaneUnit").value;
+        const propaneConsumption = parseFloat(document.getElementById("propaneConsumption").value) || 0;
+        const propaneUnit = document.getElementById("propaneUnit").value;
+
+        // Calculate emissions for each fuel
+        const gasEmissions = calculateEmission(gasConsumption, gasUnit, 'naturalGas');
+        const cngEmissions = calculateEmission(cngConsumption, cngUnit, 'cng');
+        const lngEmissions = calculateEmission(lngConsumption, lngUnit, 'lng');
+        const lpgEmissions = calculateEmission(lpgConsumption, lpgUnit, 'lpg');
+        const butaneEmissions = calculateEmission(butaneConsumption, butaneUnit, 'butane');
+        const propaneEmissions = calculateEmission(propaneConsumption, propaneUnit, 'propane');
+
+        // Output results (console, display in form, etc.)
+        console.log("Natural Gas Emissions:", gasEmissions);
+        console.log("CNG Emissions:", cngEmissions);
+        console.log("LNG Emissions:", lngEmissions);
+        console.log("LPG Emissions:", lpgEmissions);
+        console.log("Butane Emissions:", butaneEmissions);
+        console.log("Propane Emissions:", propaneEmissions);
+
+        // Example: Store emissions for session use (optional)
+        sessionStorage.setItem("StationaryCombustion", gasEmissions + "," + cngEmissions + "," + lngEmissions + "," + lpgEmissions + "," + butaneEmissions + "," + propaneEmissions);
+    }
+    function handleFormSubmit() {
+        // Perform emissions calculations
+        calculateTotalEmissions();
+
+        // Submit the form after the calculations
+        document.querySelector('form').submit();
+    }
+</script>
+ 
