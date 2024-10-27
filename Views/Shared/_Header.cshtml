@@ -1,0 +1,104 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using WTechAuth.Areas.Identity.Data
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!-- Header Section -->
+<div class="header">
+    <div class="header-title">
+        <!-- Dynamically inject the page title here -->
+        <h1>@ViewData["Title"]</h1>
+    </div>
+
+    <div class="header-menu">
+        @if (SignInManager.IsSignedIn(User))
+
+
+
+        {
+@*             <a id="carbonCalculator" class="btn custom-btn me-2" asp-controller="CarbonCalculator" asp-action="MobileCombustion">
+                Carbon Calculator
+            </a> *@
+
+
+
+
+            <!-- Display logged-in user's name -->
+            <span class="me-2">
+                 @UserManager.GetUserAsync(User).Result?.UserName
+            </span>
+
+
+            <form id="logoutForm" class="d-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+                <button id="logout" type="submit" class="btn btn-link text-dark border-0 d-inline">
+                    Logout
+                </button>
+            </form>
+        }
+    </div>
+</div>
+
+<!-- Conditional Content Based on Dashboard, placed below the header -->
+@if (ViewData["Title"]?.ToString() == "Dashboard")
+
+{
+    <!-- Additional Dashboard-Specific Header Content -->
+    <div class="header-content"  style="background-color: #ebf3f9;">
+        <div class="row " >
+            <!-- Year Picker and Month Names Section -->
+            <div class="row header2" >
+                <div class="col-md-4 d-flex justify-content-start">
+                    <!-- Year Picker aligned to the left -->
+                    <div class="year-picker d-flex align-items-center">
+                        <button id="prevYear" class="btn ">&lt;</button>
+                        <span id="currentYear" class="fs-3 mx-3">2024</span>
+                        <button id="nextYear" class="btn ">&gt;</button>
+                    </div>
+                </div>
+                <div class="col-md-8 d-flex justify-content-end">
+                    <!-- Month Names aligned to the right -->
+                    <div class="month-names d-flex justify-content-around w-100">
+                        <span>January</span>
+                        <span>February</span>
+                        <span>March</span>
+                        <span>April</span>
+                        <span>May</span>
+                        <span>June</span>
+                        <span>July</span>
+                        <span>August</span>
+                        <span>September</span>
+                        <span>October</span>
+                        <span>November</span>
+                        <span>December</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Year Picker -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const currentYearElem = document.getElementById('currentYear');
+            let currentYear = new Date().getFullYear();
+
+            function updateYear(year) {
+                currentYearElem.textContent = year;
+            }
+
+            document.getElementById('prevYear').addEventListener('click', function () {
+                currentYear--;
+                updateYear(currentYear);
+            });
+
+            document.getElementById('nextYear').addEventListener('click', function () {
+                currentYear++;
+                updateYear(currentYear);
+            });
+
+            // Initialize with the current year
+            updateYear(currentYear);
+        });
+    </script>
+}

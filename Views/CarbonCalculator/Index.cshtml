@@ -1,145 +1,140 @@
 ﻿@model WTechAuth.Models.CarbonCalculatorViewModel
 
 @{
-    ViewData["Title"] = "Carbon Calculator - Step 1";
+    ViewData["Title"] = "Mobile Combustion - Step 1";
 }
 
-<h2>Step 1: Company Information (Scope - 1)</h2>
-<h3 style="color:red; font-size: 14px;">
-    Enter the basic information about your company. You need to perform a separate calculation using the CO2-calculator for each facility/office your company owns.
-</h3>
+<div class="main-content ">
+    <h2>Company Information</h2>
+    
+</div>
 
-<form method="post" asp-action="MobileCombustion">
-    <div class="row">
-        <div class="col-md-6">
-    <div class="mb-3">
-        <label for="companyName" class="form-label">What is your company’s name?</label>
-        <input type="text" class="form-control" id="companyName" placeholder="Enter company name" value="ABC Company" readonly>
-    </div>
-        </div>
+<!-- Card Layout for the Form -->
+<div  style="margin-top:10px;">
+    <div class="card-body">
+        <!-- Form starts here -->
+        <form method="post" asp-action="MobileCombustion">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="companyName" class="label">What is your company’s name?</label>
+                        <input type="text" class="form-control" id="companyName" placeholder="Enter company name" value="ABC Company" readonly>
+                    </div>
+                </div>
 
                 <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="companyEmail" class="label">Company’s Email <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="companyEmail" placeholder="Enter company email" required value="abc@gmai.com" readonly>
+                    </div>
+                </div>
+            </div>
 
-    <div class="mb-3">
-                <label for="companyEmail" class="form-label">Company’s Email <span class="text-danger">*</span></label>
-                <input type="email" class="form-control" id="companyEmail" placeholder="Enter company email" required value="abc@gmai.com" readonly>
-    </div>
-    </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-    <div class="mb-3">
-        <label for="reportingPerson" class="form-label">Name of the reporting person (optional)</label>
-                <input type="text" class="form-control" id="reportingPerson" placeholder="Enter name of reporting person" value="John Doe" readonly>
-    </div>
-   </div>
-            <div class="col-md-6">
-   <div class="mb-3">
-        <label for="jobTitle" class="form-label">Job title (optional)</label>
-                <input type="text" class="form-control" id="jobTitle" placeholder="Enter job title" value="Finance Manager" readonly>
-    </div>
-    </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="reportingPerson" class="label">Name of the reporting person (optional)</label>
+                        <input type="text" class="form-control" id="reportingPerson" placeholder="Enter name of reporting person" value="John Doe" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="jobTitle" class="label">Job title (optional)</label>
+                        <input type="text" class="form-control" id="jobTitle" placeholder="Enter job title" value="Finance Manager" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="emissionYear" class="label">Emission estimation for the year <span class="text-danger">*</span></label>
+                        <select class="form-select" id="emissionYear" name="emissionYear" required>
+                            <option value="">Select Year</option>
+                            @foreach (var year in ViewBag.Years)
+                            {
+                                if (year == ViewBag.SelectedYear)
+                                {
+                                    <option value="@year" selected>@year</option>
+                                }
+                                else
+                                {
+                                    <option value="@year">@year</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="country" class="label">Specify your country <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="country" value="USA" required readonly>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="eGrid" class="label">Select the eGrid of the USA</label>
+                        <select class="form-select" id="eGrid" readonly>
+                            <option selected>ASCC Alaska Grid</option>
+                            <option value="1">eGrid Option 1</option>
+                            <option value="2">eGrid Option 2</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="facilitySize" class="label">What is the size of your facility/office?</label>
+                        <input type="number" class="form-control" id="facilitySize" placeholder="Enter size" value="1000" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="officeUnit" class="label">Unit</label>
+                        <select class="form-select" id="officeUnit" name="officeUnit">
+                            <option value="m2" selected>m²</option>
+                            <option value="ft2">ft²</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="employeeCount" class="label">How many employees work in your company?</label>
+                        <input type="number" class="form-control" id="employeeCount" value="50" readonly>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="remoteCount" class="label">How many employees work from home? (If any)</label>
+                        <input type="number" class="form-control" id="remoteCount" value="30" readonly>
+                    </div>
+                </div>
+            </div>
+
             <div class="mb-3">
-                <label for="emissionYear" class="form-label">Emission estimation for the year <span class="text-danger">*</span></label>
-                <select class="form-select" id="emissionYear" name="emissionYear" required>
-                    <option value="">Select Year</option>
-                    @foreach (var year in ViewBag.Years)
-                    {
-                        if (year == ViewBag.SelectedYear)
-                        {
-                            <option value="@year" selected>@year</option>
-                        }
-                        else
-                        {
-                            <option value="@year">@year</option>
-                        }
-                    }
+                <label for="businessType" class="label">What is your business type? <span class="text-danger">*</span></label>
+                <select class="form-select" id="businessType" name="businessType" required>
+                    <option value="Average Business" selected>Average Business</option>
+                    <option value="High Energy Organization">High Energy Organization</option>
                 </select>
             </div>
+@* 
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn simple-btn">Edit</button>
 
+            </div> *@
 
-        </div>
-        <div class="col-md-6">
-
-    <div class="mb-3">
-                <label for="country" class="form-label">Specify your country <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="country" value="USA" required readonly>
+        </form>
+        <!-- Form ends here -->
     </div>
-    </div>
-
-    </div>
-    <!-- Row with two fields in one column -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="mb-3">
-                <label for="eGrid" class="form-label">Select the eGrid of the USA</label>
-                <select class="form-select" id="eGrid" readonly>
-                    <option selected>ASCC Alaska Grid</option>
-                    <option value="1">eGrid Option 1</option>
-                    <option value="2">eGrid Option 2</option>
-                </select>
-            </div>
-        </div>
-
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-
-            <div class="mb-3">
-        <label for="facilitySize" class="form-label">What is the size of your facility/office?</label>
-                <input type="number" class="form-control" id="facilitySize" placeholder="Enter size" value="1000" readonly>
-    </div>
-    </div>
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="officeUnit" class="form-label">
-                    Unit
-                </label>
-                <select class="form-select" id="officeUnit" name="officeUnit">
-                    <option value="m2" selected>m²</option>
-                    <option value="ft2">ft²</option>
-                </select>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-
-            <div class="mb-3">
-                <label for="employeeCount" class="form-label">
-                    How many employees work in your company?
-                </label>
-                <input type="number" class="form-control" id="employeeCount" value="50" readonly>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="mb-3">
-                <label for="remoteCount" class="form-label">
-                    How many employees work from home? (If any)
-                </label>
-                <input type="number" class="form-control" id="remoteCount" value="30" readonly>
-            </div>
-        </div>
-
-    </div>
-    <div class="mb-3">
-        <label for="businessType" class="form-label">
-            What is your business type? <span class="text-danger">*</span>
-        </label>
-        <select class="form-select" id="businessType" name="businessType" required>
-            <option value="Average Business" selected>Average Business</option>
-            <option value="High Energy Organization">High Energy Organization</option>
-        </select>
-    </div>
-
-
-
-    <div class="d-flex justify-content-center">
-        <button type="submit" class="btn simple-btn">Next</button>
-    </div>
-</form>
+</div>

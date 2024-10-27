@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Globalization;
 using WTechAuth.Data;
 using WTechAuth.Models;
 
@@ -10,6 +12,7 @@ namespace WTechAuth.Controllers
     {
 
         private readonly WTechAuthDbContext _context;
+        public DbSet<SummativeResult> SummativeResults { get; set; }
 
         public CarbonCalculatorController(WTechAuthDbContext context)
         {
@@ -32,15 +35,12 @@ namespace WTechAuth.Controllers
 
             return View();
         }
-        [HttpPost]
-
+ 
         // Method to fetch emission factors from the database
         public IActionResult MobileCombustion()
         {
+            return View();
 
-            var mobileCombustionFactors = _context.MobileCombustion.ToList();
-            ViewBag.FactorList = mobileCombustionFactors; // Passing to ViewBag
-            return View(mobileCombustionFactors); // Or passing to Model
         }
 
         [HttpPost]
@@ -70,7 +70,8 @@ namespace WTechAuth.Controllers
         {
             return View();
         }
-        public IActionResult Transportationofgoods() { 
+        public IActionResult Transportationofgoods()
+        {
 
             return View();
         }
@@ -98,5 +99,47 @@ namespace WTechAuth.Controllers
             }
             return View("StepThree", model);
         }
+
+        [HttpPost]
+        public IActionResult SaveEmissions([FromBody] Root emissionsData)
+        {
+            
+            var resultsToSave = new List<SummativeResult>();
+
+            var userId = HttpContext.Session.GetString("UserId"); // Retrieve UserId from session
+
+            foreach (var emission in emissionsData.emissionsData)
+            {
+                // You may want to validate categories, etc. before saving
+                resultsToSave.Add(new SummativeResult
+                {
+                    UserId = "123",
+                    Scope = "S-1", // Adjust according to your requirements
+                    Category = emission.category,
+                    Result = Convert.ToDecimal(emission.result),
+                    DateTime = DateTime.Now // Adjust according to your requirements
+                });
+            }
+
+            if (resultsToSave.Count > 0)
+            {
+                try
+                {
+                    _context.SummativeResults.AddRange(resultsToSave);
+                    _context.SaveChanges();
+                    return Json(new { success = true, message = "Emissions saved successfully!" });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = "Error saving emissions.", error = ex.Message });
+                }
+            }
+            else
+            {
+                return Json(new { success = false, message = "No valid emissions data to save." });
+            }
+        }
+
+
     }
-}
+}   

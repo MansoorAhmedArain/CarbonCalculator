@@ -1,32 +1,249 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
-  font-family: Roboto , sans-serif;
-  color: #000
+    margin-bottom: 60px;
+    font-family: Roboto, sans-serif;
+    color: #000
+    Background
 }
+
+/* General Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+
+
+
+
+/* General Layout Styling */
+
+/* Styles for Header */
+.header {
+    position: fixed;
+    top: 0;
+    width: calc(100% - 250px); /* Header width minus the sidebar width */
+    background-color: #ebf3f9; /* Same as the sidebar */
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 50px 10px 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #e1e1e1;
+    left: 275px; /* Align with sidebar */
+    border-radius: 0; /* Remove border radius to create sharp edges */
+}
+
+
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #ffffff; /* Light background color */
+}
+
+.year-picker {
+    display: flex;
+    font-size: 0.9rem; 
+
+    align-items: center;
+    justify-content: flex-start; 
+    border-radius: 5px;
+}
+    
+.month-names {
+    display: flex;
+    justify-content: space-around;
+    font-weight: bold;
+    font-size: 1rem; /* Adjusted font size */
+ }
+
+    .month-names span {
+        padding: 5px 5px;  
+        border: 1px solid transparent;  
+        border-radius: 4px; 
+        transition: background-color 0.3s, border-color 0.3s; 
+    }
+
+        .month-names span:hover {
+            background-color: #007bff; /* Highlight color on hover */
+            color: white; /* Change text color on hover */
+            border-color: #0056b3; /* Darker border on hover */
+        }
+
+.btn {
+    margin: 0 10px; /* Space between buttons */
+    border-radius: 5px; /* Rounded corners */
+}
+
+
+
+/* Page Title Styling (leftmost side of header) */
+.header-title {
+    margin-right: auto; /* Push to the left */
+}
+
+    .header-title h1 {
+        margin: 0;
+        font-size: 20px;
+        color: #34495e;
+    }
+
+/* Header Menu Styling (rightmost side of header) */
+.header-menu {
+    display: flex;
+    align-items: center;
+}
+
+    .header-menu a, .header-menu form {
+        margin-left: 20px; /* Spacing between Carbon Calculator and Logout */
+    }
+
+/* Custom styles for Carbon Calculator button */
+#carbonCalculator {
+    padding: 6px 12px;
+    border: 1px solid #000; /* Solid black border */
+    border-radius: 6px;
+    background-color: black;
+    color: white;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+    #carbonCalculator:hover {
+        background-color: white;
+        color: black;
+        border-color: black;
+    }
+
+/* Logout button tweaks */
+#logout {
+    padding: 6px 12px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#logoutForm {
+    display: inline; /* Ensure the form is inline */
+}
+
+.header-menu a {
+    margin-left: 20px;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+    .header-menu a:hover {
+        color: #89967a;
+    }
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #f5f7fa;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-logo img {
+    margin-bottom: 30px;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+    gap: 20px; /* Add spacing between the menu items */
+}
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    color: #333;
+    text-decoration: none;
+    position: relative;
+    font-weight: bold;
+}
+
+    .sidebar-link i {
+        margin-right: 10px;
+    }
+
+    /* Green underline and left vertical line for active link */
+    .sidebar-link.active {
+        color: #27ae60; /* Green color for active text */
+    }
+
+        /* Vertical green line on the left for the active link */
+        .sidebar-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background-color: #27ae60; /* Green vertical line */
+        }
+
+        /* Green underline for the active link */
+        .sidebar-link.active::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 4px;
+          }
+
+.sidebar-footer {
+    margin-top: auto; /* Pushes the footer to the bottom */
+    padding: 10px 0;
+ }
+
+    .sidebar-footer a {
+        color: #333;
+        text-decoration: none;
+        padding: 10px 0;
+        display: block;
+        font-weight: bold;
+    }
+
+/* Main Content */
+.main-content {
+     padding: 20px;
+    padding-top: 100px; /* Adjust based on header height */
+}
+
 input {
     line-height: 1.3;
     color: #555555;
     background-color: #ffffff;
-    border-color:  rgba(0, 0, 0, 1);
+    border-color: rgba(0, 0, 0, 1);
     border-width: 1px;
     border-style: solid;
     border-radius: 6px;
@@ -38,6 +255,70 @@ input {
     outline: none;
     font-weight: normal;
 }
+
+/* Styles for Sidebar */
+.sidebar {
+    width: 250px; /* Set sidebar width */
+    height: 100vh; /* Full height */
+    position: fixed; /* Fixed to left */
+    background-color: #ebf3f9;
+    color: #000;
+}
+
+.sidebar-logo {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.sidebar-menu {
+    padding-left: 0;
+}
+
+.sidebar-link {
+    display: block;
+    padding: 10px 20px;
+    color: #000;
+    text-decoration: none;
+}
+
+    .sidebar-link:hover {
+        background-color: white;
+        color: #000;
+    }
+
+.sidebar-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+}
+
+/* Active link styles */
+.sidebar-link.active {
+    color: #27ae60;
+ }
+
+/* Styles for Header */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: white;
+    z-index: 1000;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+ 
+.header-content {
+    margin-left: 275px;
+    padding: 20px;
+    margin-top: 55px;
+    background-color: #fff; /* White background */
+    border: 1px solid #e1e1e1; /* Add border to match the header */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Optional shadow */
+    border-radius: 0; /* Remove border-radius for sharp edges */
+}
+
 
 
 /*tab navigation*/
@@ -111,24 +392,67 @@ input {
         border-color: black;
     }
 
-    /*Hidden Field*/
-    .hidden-field {
-        display: none;
-    }
+/*Hidden Field*/
+.hidden-field {
+    display: none;
+}
 
-    /*Label*/
+/*Label*/
 .label {
     max-width: 100%;
-    font-size: 15px;
+    font-size: 16px;
     color: #000;
-    font-weight: 500;
-     padding: 0 0 3px 0;
+    font-weight: 700;
+    padding: 0 0 3px 0;
     margin: 0;
     width: auto;
     display: block;
 }
+.card {
+    border-radius: 25px;
+    background-color: #ebf3f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+#scope1Chart, #scope2Chart, #scope3Chart {
+    width: 100px !important; 
+    height: 80px !important; 
+    margin: 0 auto; 
+}
+.underline {
+    font-weight: bold;
+    color: black;
+}
 
-.selected {
-    background-color: black;
-    color: white;
+.scope-1 {
+    text-decoration: underline solid #1abc9c;
+}
+
+.scope-2 {
+    text-decoration: underline solid #3498db;
+}
+
+.scope-3 {
+    text-decoration: underline solid #f1c40f;
+}
+
+#chartCenterText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.card-title, .total-impact-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: left;
+    margin-top: 10px;
+}
+
+.table-icon {
+    font-size: 1.2em;
+    margin-right: 5px;
+    color: #27ae60;
 }

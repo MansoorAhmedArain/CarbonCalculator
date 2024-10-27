@@ -1,13 +1,18 @@
-﻿@model WTechAuth.Models.CarbonCalculatorViewModel
+﻿@using System.Security.Claims
+@model WTechAuth.Models.CarbonCalculatorViewModel
 
 @{
     ViewData["Title"] = "Step 5: Refrigerants and fugitive emissions (Scope-1)";
 }
+<div class="main-content card">
+
 
 <h2>Step 5: Refrigerants and fugitive emissions (Scope-1)</h2>
 <h3 style="color:red; font-size: 18px; font-weight: 600; ">
     <i>Emissions from the leakage from the refrigeration devices</i>
 </h3>
+</div>
+
 
 <!-- Form Starts Here -->
 <form method="post" asp-action="ElectricityHeating" id="emissionForm">
@@ -101,17 +106,20 @@
             <!-- Add more input fields as needed -->
         </div>
     </div>
-      @* <input type="button" value="Calculate Emissions" onclick="calculateTotalEmissions()"> *@ 
- 
+ <input type="button" value="Calculate Emissions" onclick="calculateTotalEmissions()"> 
+
     <div class="d-flex justify-content-center">
         <button type="button" class="btn simple-btn mx-3" onclick="window.location.href='@Url.Action("DeliveryVehicle", "CarbonCalculator")'">Previous</button>
         <button class="btn simple-btn mx-3" onclick="handleFormSubmit()">Next</button>
+        <input class="btn simple-btn mx-3"  type="button" value="Calculate and Save Emissions" onclick="calculateAndSaveEmissions()">
+
     </div>
 
- </form>
- 
+</form>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ 
 <script>
     $(document).ready(function () {
         // Handle checkbox change event
@@ -150,28 +158,20 @@
         const r508B = parseFloat(document.getElementById('r508BValue').value) || 0;
 
         // Calculate emissions for each selected refrigerant
-        const carbonDioxideEmissions = (carbonDioxide * emissionFactors.carbonDioxide).toFixed(4);
-        const methaneEmissions = (methane * emissionFactors.methane).toFixed(4);
-        const nitrousOxideEmissions = (nitrousOxide * emissionFactors.nitrousOxide).toFixed(4);
-        const hfc23Emissions = (hfc23 * emissionFactors.hfc23).toFixed(4);
-        const hfc32Emissions = (hfc32 * emissionFactors.hfc32).toFixed(4);
-        const hfc125Emissions = (hfc125 * emissionFactors.hfc125).toFixed(4);
-        const r507AEmissions = (r507A * emissionFactors.r507A).toFixed(4);
-        const r508BEmissions = (r508B * emissionFactors.r508B).toFixed(4);
-
-        // Log emissions to the console
-        console.log("Carbon Dioxide Emissions:", carbonDioxideEmissions);
-        console.log("Methane Emissions:", methaneEmissions);
-        console.log("Nitrous Oxide Emissions:", nitrousOxideEmissions);
-        console.log("HFC-23 Emissions:", hfc23Emissions);
-        console.log("HFC-32 Emissions:", hfc32Emissions);
-        console.log("HFC-125 Emissions:", hfc125Emissions);
-        console.log("R507A Emissions:", r507AEmissions);
-        console.log("R508B Emissions:", r508BEmissions);
+        const carbonDioxideEmissions = (carbonDioxide * emissionFactors.carbonDioxide);
+        const methaneEmissions = (methane * emissionFactors.methane);
+        const nitrousOxideEmissions = (nitrousOxide * emissionFactors.nitrousOxide);
+        const hfc23Emissions = (hfc23 * emissionFactors.hfc23);
+        const hfc32Emissions = (hfc32 * emissionFactors.hfc32);
+        const hfc125Emissions = (hfc125 * emissionFactors.hfc125);
+        const r507AEmissions = (r507A * emissionFactors.r507A);
+        const r508BEmissions = (r508B * emissionFactors.r508B);
+        const totalEmissions = carbonDioxideEmissions + methaneEmissions + nitrousOxideEmissions + hfc23Emissions + hfc32Emissions + hfc125Emissions + r507AEmissions + r508BEmissions;
+         
+        console.log("Total Emissions:", totalEmissions);
 
         // Store the emissions in sessionStorage (or handle them as required)
-        sessionStorage.setItem("RefrigerantEmissions", carbonDioxideEmissions + "," + methaneEmissions + "," + nitrousOxideEmissions +
-            "," + hfc23Emissions + "," + hfc32Emissions + "," + hfc125Emissions + "," + r507AEmissions + "," + r508BEmissions);
+        sessionStorage.setItem("RefrigerantEmissions", totalEmissions);
     }
 
     // Example button action
@@ -182,4 +182,51 @@
         // Submit the form after the calculations
         document.getElementById('emissionForm').submit();
     }
+
+    // Example button action
+    function handleFormSubmit() {
+        // Perform emissions calculations first
+        calculateTotalEmissions();
+
+        // Delay form submission to ensure emissions data is stored
+        setTimeout(function () {
+            document.getElementById('emissionForm').submit();
+        }, 100); // Adjust timing if needed
+    }
+
+    function calculateAndSaveEmissions() {
+        calculateTotalEmissions(); // Calculate and store emissions
+
+        setTimeout(function () { // Add delay to ensure emissions data is saved
+            const totalEmissions = {
+                mobileCombustion: sessionStorage.getItem("MobileCombustion"),
+                stationaryCombustion: sessionStorage.getItem("StationaryCombustion"),
+                processEmission: sessionStorage.getItem("ProcessEmission"),
+                refrigerantEmissions: sessionStorage.getItem("RefrigerantEmissions")
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/CarbonCalculator/SaveEmissions",
+                data: JSON.stringify(totalEmissions),
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    if (response.success) {
+                        alert("Emissions calculated and saved successfully!");
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                },
+                error: function (error) {
+                    console.error("Error saving emissions:", error);
+                    alert("There was an error saving emissions.");
+                }
+            });
+        }, 100); // Adjust timing if needed
+    }
+
 </script>
+
+
+
+

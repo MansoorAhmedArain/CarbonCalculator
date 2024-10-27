@@ -1,14 +1,16 @@
-﻿@model IEnumerable<WTechAuth.Models.MobileCombustion>
+﻿ @model WTechAuth.Models.CarbonCalculatorViewModel
 
 @{
     ViewData["Title"] = "Mobile Combustion";
 }
+<div class="main-content">
+
 
 <h2>Step 2: Mobile combustion (Scope -1)</h2>
 <h3 style="color:red; font-size: 14px;">
     Enter the average monthly data for your company’s vehicles. The vehicles that are owned by the company are included in this section.
 </h3>
-
+</div>
 <!-- Form Starts Here -->
 <form method="post" asp-action="StationaryCombustion">
     <div class="row">
@@ -152,7 +154,7 @@
 
 
             <!-- Submit Button -->
-            @* <input type="button" value="Calculate Emissions" onclick="calculateTotalEmissions()"> *@
+             @* <input type="button" value="Calculate Emissions" onclick="calculateTotalEmissions()">  *@
 
             <div class="d-flex justify-content-center">
                 <button type="button" class="btn simple-btn mx-3" onclick="window.location.href='@Url.Action("MobileCombustion", "CarbonCalculator")'">Previous</button>
@@ -166,13 +168,13 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const emissionFactors = {
-    @foreach (var factor in Model.Where(f => f.VehicleType == "Cars"))
-    {
-        <text>
-                "@factor.FuelType": @factor.EmissionFactor@((Model.Last() != factor) ? "," : "")
-        </text>
-    }
-            };
+        gasoline: 0.16391,
+        diesel: 0.16983,
+        cng: 0.17504,
+        hybrid: 0.11898,
+        electric: 0
+    };
+
     // Add event listeners to toggle visibility for each vehicle category
     document.getElementById('btn-cars').addEventListener('click', function () {
         toggleFields('cars-fields', this);
@@ -214,23 +216,39 @@
     function calculateEmissions(countId, distanceId, fuelType) {
         const count = parseFloat($('#' + countId).val()) || 0;
         const distance = parseFloat($('#' + distanceId).val()) || 0;
-        const emissionFactor = emissionFactors[fuelType.charAt(0).toUpperCase() + fuelType.slice(1).toLowerCase()];
+
+        // Use the fuelType directly to access the emission factors
+        const emissionFactor = emissionFactors[fuelType.toLowerCase()];
+
+        if (emissionFactor === undefined) {
+            console.error(`Emission factor not found for fuel type: ${fuelType}`);
+            return 0; // Handle error appropriately
+        }
+
         return count * distance * emissionFactor;
     }
 
+
+
     function calculateTotalEmissions() {
-        const gasolineEmissions = calculateEmissions('gasolineCount', 'gasolineDistance', 'Gasoline');
-        const dieselEmissions = calculateEmissions('dieselCount', 'dieselDistance', 'Diesel');
-        const cngEmissions = calculateEmissions('cngCount', 'cngDistance', 'CNG');
-        const hybridEmissions = calculateEmissions('hybridCount', 'hybridDistance', 'Hybrid');
-        const electricEmissions = calculateEmissions('electricCount', 'electricDistance', 'Electric');
-        sessionStorage.setItem("MobileCombustion", gasolineEmissions + "," + dieselEmissions + "," + cngEmissions + "," + hybridEmissions + "," + electricEmissions);
-        console.log('Gasoline Emissions: ', gasolineEmissions);
-        console.log('Diesel Emissions: ', dieselEmissions);
-        console.log('CNG Emissions: ', cngEmissions);
-        console.log('Hybrid Emissions: ', hybridEmissions);
-        console.log('Electric Emissions: ', electricEmissions);
+        const gasolineEmissions = calculateEmissions('gasolineCount', 'gasolineDistance', 'gasoline');
+        const dieselEmissions = calculateEmissions('dieselCount', 'dieselDistance', 'diesel');
+        const cngEmissions = calculateEmissions('cngCount', 'cngDistance', 'cng');
+        const hybridEmissions = calculateEmissions('hybridCount', 'hybridDistance', 'hybrid');
+        const electricEmissions = calculateEmissions('electricCount', 'electricDistance', 'electric');
+
+        const totalEmissions = gasolineEmissions + dieselEmissions + cngEmissions + hybridEmissions + electricEmissions;
+        sessionStorage.setItem("MobileCombustion", totalEmissions);
+        // Display the results (this could be improved to format as needed)
+        console.log("Gasoline Emissions: ", gasolineEmissions);
+        console.log("Diesel Emissions: ", dieselEmissions);
+        console.log("CNG Emissions: ", cngEmissions);
+        console.log("Hybrid Emissions: ", hybridEmissions);
+        console.log("Electric Emissions: ", electricEmissions);
+        console.log("Total Emissions: ", totalEmissions);
+         
     }
+
     function handleFormSubmit() {
         // Perform emissions calculations
         calculateTotalEmissions();

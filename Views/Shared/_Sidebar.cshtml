@@ -1,0 +1,29 @@
+﻿@using WTechAuth.Helper
+<div class="sidebar">
+    <div class="sidebar-logo">
+        <img src="/images/logo.png" alt="Logo" width="150" />
+    </div>
+    <nav class="sidebar-menu">
+        <a href="/home/index" class="sidebar-link @Html.IsActive("Home", "Index")">
+            <i class="fas fa-home"></i> Dashboard
+        </a>
+
+        <a href="/reports" class="sidebar-link @Html.IsActive("/reports")">
+            <i class="fas fa-chart-bar"></i> Reports
+        </a>
+        <a href="/CarbonCalculator/index" class="sidebar-link @Html.IsActive("/CarbonCalculator/index")">
+            <i class="fas fa-user"></i> Overview
+        </a>
+
+        <a class="sidebar-link @Html.IsActive("/CarbonCalculator/MobileCombustion")"
+           asp-controller="CarbonCalculator"
+           asp-action="MobileCombustion">
+            <i class="fas fa-calculator"></i> Carbon Calculator
+        </a>
+
+       
+    </nav>
+    <div class="sidebar-footer">
+        <a href="/help" class="sidebar-link">Help & Support</a>
+    </div>
+</div>

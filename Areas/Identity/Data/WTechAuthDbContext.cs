@@ -11,8 +11,8 @@ public class WTechAuthDbContext : IdentityDbContext<ApplicationUser>
         : base(options)
     {
     }
+    public DbSet<SummativeResult> SummativeResults { get; set; }
 
-    public DbSet<MobileCombustion> MobileCombustion { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

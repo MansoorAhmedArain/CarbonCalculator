@@ -3,12 +3,13 @@
 @{
     ViewData["Title"] = "Stationary Combustion - Scope 1";
 }
+<div class="main-content">
 
 <h2>Step 3:Stationary Combustion (Scope -1)</h2>
 <h3 style="color:red; font-size: 18px; font-weight: 600; ">
     <i>The combustion of fuels such as diesel, natural gas in stationary sources contributes to greenhouse gas emissions, primarily carbon dioxide (CO₂)</i>
 </h3>
-
+<div></div>
 <form method="post" asp-action="DeliveryVehicle">
     <div class="row">
         <div class="col-md-6">
@@ -215,6 +216,8 @@
         const butaneEmissions = calculateEmission(butaneConsumption, butaneUnit, 'butane');
         const propaneEmissions = calculateEmission(propaneConsumption, propaneUnit, 'propane');
 
+        const totalEmissions = gasEmissions + cngEmissions + lngEmissions + lpgEmissions + butaneEmissions + propaneEmissions;
+
         // Output results (console, display in form, etc.)
         console.log("Natural Gas Emissions:", gasEmissions);
         console.log("CNG Emissions:", cngEmissions);
@@ -224,7 +227,7 @@
         console.log("Propane Emissions:", propaneEmissions);
 
         // Example: Store emissions for session use (optional)
-        sessionStorage.setItem("StationaryCombustion", gasEmissions + "," + cngEmissions + "," + lngEmissions + "," + lpgEmissions + "," + butaneEmissions + "," + propaneEmissions);
+        sessionStorage.setItem("StationaryCombustion", totalEmissions);
     }
     function handleFormSubmit() {
         // Perform emissions calculations

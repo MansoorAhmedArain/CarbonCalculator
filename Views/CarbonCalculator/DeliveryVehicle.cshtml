@@ -3,12 +3,13 @@
 @{
     ViewData["Title"] = "Process Emission";
 }
+<div class="main-content card">
 
 <h2>Step 4: Process Emission (Scope -1)</h2>
 <h3 style="color:red; font-size: 18px; font-weight: 600; ">
     <i>Process emissions are greenhouse gases released during industrial activities, not from burning fuel. They result from chemical reactions in the production of materials like cement and steel. Common gases include carbon dioxide (CO2) and methane (CH4).</i>
 </h3>
-
+</div>
 <!-- Form Starts Here -->
 <form method="post" asp-action="FugitiveEmissions">
     <div class="row mb-3" >
@@ -118,8 +119,8 @@
     </div>
 
 
-@*      <input type="button" value="Calculate Emissions" onclick="calculateTotalEmissions()"> 
- *@
+      <input type="button" value="Calculate Emissions" onclick="calculateTotalEmissions()"> 
+ 
 
     <div class="d-flex justify-content-center">
         <button type="button" class="btn simple-btn mx-3" onclick="window.location.href='@Url.Action("StationaryCombustion", "CarbonCalculator")'">Previous</button>
@@ -156,8 +157,10 @@
         });
     });
 
-    // Function to calculate emissions for each process separately
     function calculateTotalEmissions() {
+        // Clear previous session storage for ProcessEmission
+        sessionStorage.removeItem("ProcessEmission");
+
         // Get user input for all processes
         const cementProduction = parseFloat(document.getElementById('cementProduction').value) || 0;
         const steelManufacturing = parseFloat(document.getElementById('steelManufacturing').value) || 0;
@@ -170,39 +173,35 @@
         const adipicAcidProduction = parseFloat(document.getElementById('adipicAcidProduction').value) || 0;
 
         // Calculate emissions for each process
-        const cementEmissions = (cementProduction * emissionFactors.cementProduction).toFixed(4);
-        const steelEmissions = (steelManufacturing * emissionFactors.steelManufacturing).toFixed(4);
-        const nitricAcidEmissions = (nitricAcidProduction * emissionFactors.nitricAcidProduction).toFixed(4);
-        const ammoniaEmissions = (ammoniaProduction * emissionFactors.ammoniaProduction).toFixed(4);
-        const limeEmissions = (limeProduction * emissionFactors.limeProduction).toFixed(4);
-        const glassEmissions = (glassManufacturing * emissionFactors.glassManufacturing).toFixed(4);
-        const aluminumEmissions = (aluminumProduction * emissionFactors.aluminumProduction).toFixed(4);
-        const sodaAshEmissions = (sodaAshProduction * emissionFactors.sodaAshProduction).toFixed(4);
-        const adipicAcidEmissions = (adipicAcidProduction * emissionFactors.adipicAcidProduction).toFixed(4);
+        const cementEmissions = (cementProduction * emissionFactors.cementProduction);
+        const steelEmissions = (steelManufacturing * emissionFactors.steelManufacturing);
+        const nitricAcidEmissions = (nitricAcidProduction * emissionFactors.nitricAcidProduction);
+        const ammoniaEmissions = (ammoniaProduction * emissionFactors.ammoniaProduction);
+        const limeEmissions = (limeProduction * emissionFactors.limeProduction);
+        const glassEmissions = (glassManufacturing * emissionFactors.glassManufacturing);
+        const aluminumEmissions = (aluminumProduction * emissionFactors.aluminumProduction);
+        const sodaAshEmissions = (sodaAshProduction * emissionFactors.sodaAshProduction);
+        const adipicAcidEmissions = (adipicAcidProduction * emissionFactors.adipicAcidProduction);
 
-        // Log emissions to console
-        console.log("Cement Emissions", cementEmissions);
-        console.log("Steel Emissions", steelEmissions);
-        console.log("Nitric Acid Emissions", nitricAcidEmissions);
-        console.log("Ammonia Emissions", ammoniaEmissions);
-        console.log("Lime Emissions", limeEmissions);
-        console.log("Glass Emissions", glassEmissions);
-        console.log("Aluminum Emissions", aluminumEmissions);
-        console.log("Soda Ash Emissions", sodaAshEmissions);
-        console.log("Adipic Acid Emissions", adipicAcidEmissions);
+        // Correctly sum all emissions
+        const totalEmissions = cementEmissions + steelEmissions + nitricAcidEmissions + ammoniaEmissions
+            + limeEmissions + glassEmissions + aluminumEmissions + sodaAshEmissions + adipicAcidEmissions;
+
+        console.log("Total Emissions", totalEmissions);
 
         // Store emissions in sessionStorage
-        sessionStorage.setItem("ProcessEmission", cementEmissions + "," + steelEmissions + "," + nitricAcidEmissions +
-            "," + ammoniaEmissions + "," + limeEmissions + "," + glassEmissions + "," + aluminumEmissions + "," +
-            sodaAshEmissions + "," + adipicAcidEmissions);
+        sessionStorage.setItem("ProcessEmission", totalEmissions);
     }
 
     function handleFormSubmit() {
-        // Perform emissions calculations
-        calculateTotalEmissions();
+        // Perform emissions calculations only if not already calculated
+        if (!sessionStorage.getItem("ProcessEmission")) {
+            calculateTotalEmissions();
+        }
 
         // Submit the form after the calculations
         document.querySelector('form').submit();
     }
+
 
 </script>
